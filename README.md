@@ -18,15 +18,15 @@ cd test-task
 ```
 
 ```bash
+npm install
+```
+
+```bash
 docker-compose build
 ```
 
 ```bash
 docker-compose up
-```
-
-```bash
-npm install
 ```
 
 Open `variables.env` and inject your credentials so it looks like this
