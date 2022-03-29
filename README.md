@@ -18,6 +18,10 @@ cd test-task
 ```
 
 ```bash
+npm install
+```
+
+```bash
 docker-compose build
 ```
 
@@ -26,7 +30,7 @@ docker-compose up
 ```
 
 ```bash
-npm install
+npm run db:migrate
 ```
 
 Open `variables.env` and inject your credentials so it looks like this
