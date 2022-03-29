@@ -1,0 +1,37 @@
+version: '3.8'
+services:
+  web:
+    build:
+      context: .
+    working_dir: /app
+    env_file: .env
+    image: node-mysql-app
+    command: npm run dev
+    ports:
+      - ${NODE_LOCAL_PORT}:${NODE_DOCKER_PORT}
+    depends_on:
+      - mysqldb
+    environment:
+      MYSQL_HOST: mysqldb
+      APPLICATION_PORT: ${NODE_DOCKER_PORT}
+    stdin_open: true
+    tty: true
+    volumes:
+      - ./:/app/
+  mysqldb:
+    image: mysql:latest
+    restart: always
+    expose:
+      - ${MYSQL_DOCKER_PORT}
+    env_file: .env
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    ports:
+      - ${MYSQL_LOCAL_PORT}:${MYSQL_DOCKER_PORT}
+
+volumes:
+  db-config:
+  db-data:
