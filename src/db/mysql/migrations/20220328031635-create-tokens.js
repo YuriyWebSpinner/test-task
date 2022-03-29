@@ -13,10 +13,17 @@ module.exports = {
       },
       user_id: {
         type: Sequelize.STRING(64),
-        allowNull: false
+        allowNull: false,
+        references: {
+          model: 'users',
+          key: 'id',
+        },
       },
       expiresIn: Sequelize.BIGINT,
-      createdAt: Sequelize.DATE
+      createdAt: {
+        type: Sequelize.DATE,
+        defaultValue: Sequelize.fn('NOW'),
+      }
     });
   },
   async down(queryInterface) {

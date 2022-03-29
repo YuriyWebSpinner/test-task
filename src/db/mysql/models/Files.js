@@ -37,13 +37,15 @@ Files.init({
       notEmpty: true,
     },
   },
-  date_upload: DataTypes.DATE,
+  date_upload: {
+    type: DataTypes.DATE,
+    defaultValue: DataTypes.NOW,
+  },
   user_id: {
     type: DataTypes.STRING(150),
     allowNull: false,
-    validate: {
-      notEmpty: true,
-    },
+    references: 'users',
+    referencesKey: 'id'
   },
 }, {
   sequelize,

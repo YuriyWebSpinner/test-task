@@ -12,9 +12,14 @@ Tokens.init({
   refresh_token: DataTypes.STRING(),
   user_id: {
     type: DataTypes.STRING(64),
+    references: 'users',
+    referencesKey: 'id'
   },
   expiresIn: DataTypes.BIGINT,
-  createdAt: DataTypes.DATE
+  createdAt: {
+    type: DataTypes.DATE,
+    defaultValue: DataTypes.NOW,
+  }
 }, {
   sequelize,
   modelName: "tokens",

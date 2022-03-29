@@ -25,11 +25,15 @@ module.exports = {
       },
       date_upload: {
         type: Sequelize.DATE,
-        allowNull: false,
+        defaultValue: Sequelize.fn('NOW'),
       },
       user_id: {
         type: Sequelize.STRING(64),
         allowNull: false,
+        references: {
+          model: 'users',
+          key: 'id',
+        },
       }
     });
   },

@@ -1,5 +1,8 @@
 const { DataTypes, Model } = require("sequelize");
 const { sequelize } = require("../index");
+const Tokens = require('./Tokens');
+const Files = require('./Files');
+
 
 class Users extends Model {};
 
@@ -26,5 +29,10 @@ Users.init({
   tableName: "users",
   timestamps: false
 });
+
+Users.hasMany(Files, {foreignKey: 'user_id'});
+Users.hasMany(Tokens, {foreignKey: 'user_id'});
+Files.belongsTo(Users);
+Tokens.belongsTo(Users);
 
 module.exports = Users;
