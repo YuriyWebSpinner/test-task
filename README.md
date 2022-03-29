@@ -29,6 +29,10 @@ docker-compose build
 docker-compose up
 ```
 
+```bash
+npm run db:migrate
+```
+
 Open `variables.env` and inject your credentials so it looks like this
 
 ```
