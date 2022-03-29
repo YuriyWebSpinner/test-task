@@ -71,7 +71,7 @@ Rollback migrations in a database
 ```bash
 npm run db:migrate:undo
 ```
-Populate the database with fake data
+Add to database fake data
 
 ```bash
 npm run db:seed
