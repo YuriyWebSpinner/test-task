@@ -6,16 +6,14 @@ const ApiError = require('../exceptions/api-error');
 
 
 class AuthService {
-    async registration(id, password) {
-        const candidate = await userService.get(id);
+    async registration(username, password) {
+        const candidate = await userService.get(username);
         if (candidate) {
-            throw ApiError.BadRequest(`User with email address ${id} already exists`);
+            throw ApiError.BadRequest(`User with email address ${username} already exists`);
         }
-        const user = await userService.create({id, password});
+        const user = await userService.create({username, password});
         const payload = {
-            id: user.id,
-            datetime: new Date(),
-            ver: 1
+            id: user.id
         };
         const tokens = tokenService.generateTokens(payload);
         const tokenData = {
@@ -29,8 +27,8 @@ class AuthService {
         return {...tokens, user: { id: user.id }}
     }
 
-    async login(id, password) {
-        const user = await userService.get(id);
+    async login(username, password) {
+        const user = await userService.get(username);
         if (!user) {
             throw ApiError.BadRequest('User with this email or phone was not found')
         }
@@ -39,9 +37,7 @@ class AuthService {
             throw ApiError.BadRequest('Invalid password');
         }
         const payload = {
-            id: user.id,
-            datetime: new Date(),
-            ver: 0
+            id: user.id
         };
         const tokens = tokenService.generateTokens(payload);
         const tokenData = {
@@ -62,13 +58,11 @@ class AuthService {
         return await tokenService.removeToken(refreshToken);
     }
 
-    async refresh(refreshToken, accessToken) {
-        const { ver: accTokenVer = 1 } = tokenService.decode(accessToken);
-        if (!refreshToken && accTokenVer) {
+    async refresh(refreshToken) {
+        if (!refreshToken) {
             throw ApiError.UnauthorizedError();
         }
-        const userData = accTokenVer ? tokenService.validateRefreshToken(refreshToken)
-            : tokenService.validateAccessToken(accessToken);
+        const userData = tokenService.validateRefreshToken(refreshToken);
         const tokenFromDb = await tokenService.findToken(refreshToken);
 
         if (!userData || !tokenFromDb) {
@@ -77,8 +71,6 @@ class AuthService {
         const user = await userService.get(userData.id);
         const payload = {
             id: user.id,
-            datetime: new Date(),
-            ver: 1
         };
         const tokens = tokenService.generateTokens(payload);
 

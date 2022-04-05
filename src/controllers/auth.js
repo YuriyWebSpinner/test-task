@@ -10,8 +10,8 @@ class AuthController {
             if (!errors.isEmpty()) {
                 return next(ApiError.BadRequest('Validation error', errors.array()));
             }
-            const { id, password } = req.body;
-            const userData = await authService.registration(id, password);
+            const { username, password } = req.body;
+            const userData = await authService.registration(username, password);
             res.cookie('refreshToken', userData.refreshToken, {maxAge: 3 * 24 * 60 * 60 * 1000, httpOnly: true});
             return res.json(userData);
         } catch (e) {
@@ -22,8 +22,8 @@ class AuthController {
 
     async login(req, res, next) {
         try {
-            const { id = 0, password = '' } = req.body;
-            const userData = await authService.login(id, password);
+            const { username = '', password = '' } = req.body;
+            const userData = await authService.login(username, password);
             res.cookie('refreshToken', userData.refreshToken, {maxAge: 3 * 24 * 60 * 60 * 1000, httpOnly: true});
             return res.json(userData);
         } catch (e) {
@@ -35,11 +35,7 @@ class AuthController {
     async refresh (req, res, next) {
         try {
             const { refreshToken } = req.cookies;
-            const authorizationHeader = req.headers.authorization;
-            if (!authorizationHeader) return next(ApiError.UnauthorizedError());
-            const accessToken = authorizationHeader.split(' ')[1];
-            if (!accessToken) return next(ApiError.UnauthorizedError());
-            const userData = await authService.refresh(refreshToken, accessToken);
+            const userData = await authService.refresh(refreshToken);
             res.cookie('refreshToken', userData.refreshToken, {maxAge: 3 * 24 * 60 * 60 * 1000, httpOnly: true});
             return res.json(userData);
         } catch (e) {

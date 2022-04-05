@@ -17,7 +17,7 @@ class FilesService {
 
     async get (id) {
         const file = await File.findByPk(id);
-        if(!file) throw ApiError.FileNotFound();
+        if(!file) throw ApiError.NotFound();
         return file;
     }
 
@@ -27,7 +27,7 @@ class FilesService {
 
     async delete ( id ) {
         const file = await File.findByPk(id);
-        if(!file) throw ApiError.FileNotFound();
+        if(!file) throw ApiError.NotFound();
         const pathFile = path.resolve(__dirname, '..', '..', process.env.FILE_PATH, file.name);
         await this.deleteFromStorage(pathFile);
         await file.destroy();

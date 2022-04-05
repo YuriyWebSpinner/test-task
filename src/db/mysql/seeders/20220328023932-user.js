@@ -8,11 +8,11 @@ module.exports = {
       const password2 = await bcrypt.hash('testpwdphone', 3);
       usersData.push(
           {
-            id: `test${i}@gmail.com`,
+            username: `test${i}@gmail.com`,
             password: password1
           },
           {
-            id: `+353123000456${i}`,
+            username: `test${i}@gmail.com`,
             password: password2
           }
       )

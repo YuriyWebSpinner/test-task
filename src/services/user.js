@@ -6,19 +6,23 @@ const bcrypt = require("bcrypt");
 class UserService {
     async create(values) {
         const {
-            id = 0,
+            username = '',
             password = ''
         } = values;
         const hashPassword = await bcrypt.hash(password, 3);
-        return await User.create({id, password: hashPassword});
+        return await User.create({username, password: hashPassword});
     }
 
     async getAll(page=1, size=10) {
         return await User.findAll({ limit: page*size, offset: (page-1)*size });
     }
 
-    async get (id) {
-        return await User.findByPk(id);
+    async get (username) {
+        return await User.findOne({where: {username}});
+    }
+
+    async getByID (id) {
+        return await  User.findByPk(id);
     }
 
     async update (values) {
@@ -27,7 +31,7 @@ class UserService {
 
     async delete ( id ) {
         const user = await User.findByPk(id);
-        if(!user) throw ApiError.FileNotFound();
+        if(!user) throw ApiError.NotFound();
         await user.destroy();
     }
 }

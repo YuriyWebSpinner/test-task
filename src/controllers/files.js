@@ -74,7 +74,7 @@ class FileController {
         try {
             const oldFile = await fileServices.get(id);
             const filePath = path.resolve(__dirname, '..', '..', process.env.FILE_PATH, oldFile.name);
-            if (!filePath) throw ApiError.FileNotFound();
+            if (!filePath) throw ApiError.NotFound();
             await fileServices.deleteFromStorage(filePath);
             const data = {
                 id,
