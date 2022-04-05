@@ -1,4 +1,4 @@
-# Task - file hosting
+# Task - image hosting (back end)
 
 Test work for the authorization process and work with files
 
